@@ -151,7 +151,7 @@ def listen(screen=screen,button=curses.ALL_MOUSE_EVENTS,move=curses.REPORT_MOUSE
             if key in key_listeners:
                 for listener in key_listeners[key]:
                     listener(key)
-        if (type(wc) == str) and (32 <= ord(wc)):
+        if (type(wc) == str) and (((32 <= ord(wc)) and (ord(wc)<127)) or (ord(wc) >= 512)):
             if wc in char_listeners:
                 for listener in char_listeners[wc]:
                     listener(wc)
