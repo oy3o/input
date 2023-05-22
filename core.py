@@ -22,6 +22,7 @@ RIGHT_THREE         = 1<<14
 SCROLL_UP           = 1<<16
 SCROLL_DOWN         = 1<<21
 
+ESC = 27
 ENTER = 10
 BACKSPACE = 127
 DOWN = 258
