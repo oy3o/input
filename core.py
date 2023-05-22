@@ -90,6 +90,15 @@ z = 122
 
 mouse_listeners = {}
 key_listeners = {}
+char_listeners = {}
+
+def onchar(event, listener):
+    if event not in char_listeners:
+        char_listeners[event] = []
+    char_listeners[event].append(listener)
+
+def offchar(event, listener):
+    char_listeners[event].remove(listener)
 
 def onkey(event, listener):
     if CTRL|event:
@@ -141,8 +150,12 @@ def listen(screen=screen,button=curses.ALL_MOUSE_EVENTS,move=curses.REPORT_MOUSE
             if key in key_listeners:
                 for listener in key_listeners[key]:
                     listener(key)
-        if (type(wc) == str) and (32 <= ord(wc) and ord(wc)<127):
+        if (type(wc) == str) and (32 <= ord(wc)):
+            if wc in char_listeners:
+                for listener in char_listeners[wc]:
+                    listener(wc)
             yield wc
+    curses.mousemask(0)
     if move:
         print('\033[?1003l')
 

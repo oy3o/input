@@ -1,12 +1,12 @@
 # Input Event
 
-Support input and key detection, Cases or input characters can be subscribed to through events, the following types are supported.
+Support input and key listen, key press or utf-8 input can be subscribed to through events, the following types are supported.
 
 - ASCII Input Event
-- UTF-8 Input Event
+- CTRL+Alpha Event
 - Mouse Click Event
 - Mouse Move Event
-- CTRL+Alpha Event
+- UTF-8 Input Event
 
 ## listen key or mouse press
 combine `input.CTRL` + Upper Alpha can be access. ASCII char such as `input.A` is ASCII of `A`.
@@ -53,6 +53,18 @@ input.onmouse(input.MOVE, pos)
 input.onmouse(input.CTRL + input.ALT + input.MOVE, pos)
 
 for wc in input.listen(screen):
+    if wc == 'q':
+        input.stop()
+```
+
+## listen utf-8
+```py
+import oy3opy.input as input
+
+input.onchar('😊', lambda _:print(':smile:'))
+input.onchar('💕', lambda _:print(':love:'))
+
+for wc in input.listen(move=0):
     if wc == 'q':
         input.stop()
 ```
