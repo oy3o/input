@@ -131,9 +131,10 @@ def _init():
     curses.raw()
     return screen
 
-def listen(screen=screen,button=curses.ALL_MOUSE_EVENTS,move=curses.REPORT_MOUSE_POSITION):
+def listen(screen=screen,button=curses.ALL_MOUSE_EVENTS,move=curses.REPORT_MOUSE_POSITION, excepted=[]):
     if not screen:
         screen = _init()
+    
     global _listen
     _listen = True
     curses.mousemask(button | move)
@@ -150,8 +151,8 @@ def listen(screen=screen,button=curses.ALL_MOUSE_EVENTS,move=curses.REPORT_MOUSE
             key = ord(wc) if type(wc) == str else wc
             if key in key_listeners:
                 for listener in key_listeners[key]:
-                    listener(key)
-        if (type(wc) == str) and (((32 <= ord(wc)) and (ord(wc)<127)) or (ord(wc) >= 512)):
+                    listener(wc)
+        if (wc in excepted) or ((type(wc) == str) and (((32 <= ord(wc)) and (ord(wc)<127)) or (ord(wc) >= 512))):
             if wc in char_listeners:
                 for listener in char_listeners[wc]:
                     listener(wc)
