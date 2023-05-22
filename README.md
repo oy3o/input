@@ -9,13 +9,13 @@ Support input and key detection, Cases or input characters can be subscribed to 
 - CTRL+Alpha Event
 
 ## listen key or mouse press
-combine input.CTRL + Upper Alpha can be access. ASCII char such as input.A is ASCII of A.
+combine `input.CTRL` + Upper Alpha can be access. ASCII char such as `input.A` is ASCII of `A`.
 ```py
 import oy3opy.input as input
 
 input.onkey(input.CTRL + input.A, lambda _:print('CTRL + A'))
 
-input.onkey(input.DOWN, lambda _:print('ARROW UP'))
+input.onkey(input.DOWN, lambda _:print('ARROW DOWN'))
 input.onkey(input.UP, lambda _:print('ARROW UP'))
 input.onkey(input.LEFT, lambda _:print('ARROW LEFT'))
 input.onkey(input.RIGHT, lambda _:print('ARROW RIGHT'))
@@ -33,7 +33,7 @@ for wc in input.listen(move=0):
 ```
 
 ## listen mouse move
-input.ALT is mouse only, Because ALT + Key Alaways is System Shortcut.
+`input.ALT` is mouse only, because `ALT + Key` always is system shortcut.
 ```py
 import oy3opy.input as input
 import curses
