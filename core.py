@@ -102,7 +102,7 @@ def offchar(event, listener):
     char_listeners[event].remove(listener)
 
 def onkey(event, listener):
-    if CTRL|event:
+    if CTRL&event:
         event = event&127 - 64
     if event not in key_listeners:
         key_listeners[event] = []
