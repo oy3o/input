@@ -94,9 +94,7 @@ key_listeners = {}
 char_listeners = {}
 
 def onchar(event, listener):
-    if event not in char_listeners:
-        char_listeners[event] = []
-    char_listeners[event].append(listener)
+    char_listeners.setdefault(event, []).append(listener)
 
 def offchar(event, listener):
     char_listeners[event].remove(listener)
@@ -104,17 +102,13 @@ def offchar(event, listener):
 def onkey(event, listener):
     if CTRL&event:
         event = event&127 - 64
-    if event not in key_listeners:
-        key_listeners[event] = []
-    key_listeners[event].append(listener)
+    key_listeners.setdefault(event, []).append(listener)
 
 def offkey(event, listener):
     key_listeners[event].remove(listener)
 
 def onmouse(event, listener):
-    if event not in mouse_listeners:
-        mouse_listeners[event] = []
-    mouse_listeners[event].append(listener)
+    mouse_listeners.setdefault(event, []).append(listener)
 
 def offmouse(event, listener):
     mouse_listeners[event].remove(listener)
@@ -134,7 +128,7 @@ def _init():
 def listen(screen=screen,button=curses.ALL_MOUSE_EVENTS,move=curses.REPORT_MOUSE_POSITION, excepted=[]):
     if not screen:
         screen = _init()
-    
+
     global _listen
     _listen = True
     curses.mousemask(button | move)
