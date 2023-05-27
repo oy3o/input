@@ -1,4 +1,5 @@
-import curses
+from typing import Callable
+from oy3opy.utils.terminal import curses
 
 CTRL = 1 << 25
 ALT  = 1 << 27
@@ -101,10 +102,12 @@ def offchar(event, listener):
 
 def onkey(event, listener):
     if CTRL&event:
-        event = event&127 - 64
+        event = (event&127) - 64
     key_listeners.setdefault(event, []).append(listener)
 
 def offkey(event, listener):
+    if CTRL&event:
+        event = (event&127) - 64
     key_listeners[event].remove(listener)
 
 def onmouse(event, listener):
@@ -114,20 +117,18 @@ def offmouse(event, listener):
     mouse_listeners[event].remove(listener)
 
 
-screen = None
 _listen = False
-def _init():
-    global screen
-    screen = curses.initscr() 
-    screen.keypad(True) 
+def init():
+    curses.stdscr = curses.initscr() 
+    curses.stdscr.keypad(True) 
     curses.noecho()
     curses.cbreak()
     curses.raw()
-    return screen
 
-def listen(screen=screen,button=curses.ALL_MOUSE_EVENTS,move=curses.REPORT_MOUSE_POSITION, excepted=[]):
-    if not screen:
-        screen = _init()
+
+def listen(button=curses.ALL_MOUSE_EVENTS,move=curses.REPORT_MOUSE_POSITION, excepted=[], before:Callable=None):
+    if getattr(curses,'stdscr', None) == None:
+        init()
 
     global _listen
     _listen = True
@@ -135,9 +136,10 @@ def listen(screen=screen,button=curses.ALL_MOUSE_EVENTS,move=curses.REPORT_MOUSE
     if move:
         print('\033[?1003h')
     while _listen:
-        wc = screen.get_wch()
+        if before: before()
+        wc = curses.stdscr.get_wch()
         if wc == curses.KEY_MOUSE:
-            _,y,x,_,key = curses.getmouse()
+            _,x,y,_,key = curses.getmouse()
             if key in mouse_listeners:
                 for listener in mouse_listeners[key]:
                     listener(y, x, key)
